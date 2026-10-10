@@ -1,0 +1,37 @@
+BLACKJACK — C++17
+
+READY-TO-PLAY COPY (no compiler or installation needed)
+Extract the entire play folder before starting.
+Windows 10/11 x64: double-click simple.exe.
+macOS 11 or newer, Intel or Apple Silicon: double-click Start Blackjack.command.
+Linux x64: open a terminal in the folder and run ./blackjack.
+The play folder contains separate executables for these systems.
+
+BUILDING THE SOURCE COPY
+You need an installed compiler supporting C++17. No package manager or network
+access is used by these builds. FTXUI is already in third_party/ftxui.
+Linux/student cluster or macOS: sh build.sh, then ./blackjack.
+Windows with MinGW-w64 g++ available: build.bat, then double-click simple.exe.
+Optional CMake: cmake -S . -B build, then cmake --build build --config Release.
+
+PLAYING
+Enter your name and press Enter. Enter a whole-dollar bet from $1 to your balance.
+You start with $100. Wins pay even money; ties return your bet. Aces count as
+11 or 1 to avoid a bust. The dealer draws below 17 and stands on 17 or higher.
+During your turn, press a number or select a button with Tab/arrows and Enter:
+  1 Stand       2 Draw front     3 Draw back
+  4 Peek front  5 Peek back      6 Shuffle
+Peeks remain visible until the deck changes. Drawing removes a card from the
+chosen end of the main deque. Shuffling reorders that same deque. An exhausted
+deck is refilled automatically. Choose Play again after a round, or Quit.
+Q quits after entering your name; Esc quits at any time, including animations.
+Resize your terminal for more room. Long hands scroll to show the latest card.
+Hearts and diamonds are red; other text uses your terminal's default foreground.
+Set NO_COLOR to disable suit colors.
+
+THIRD-PARTY CREDIT
+FTXUI 7.0.3 provides terminal layout, input, and animation. Its unmodified
+ftxui.hpp and ftxui.cpp are bundled with the MIT license in third_party/ftxui.
+Source: https://github.com/ArthurSonzogni/FTXUI/releases/tag/v7.0.3
+Amalgamated archive SHA-256:
+63d13bb65747bdbf0edf04d83ce490708022371cf378f15fad8489249ea4fd9a

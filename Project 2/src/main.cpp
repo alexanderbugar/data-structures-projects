@@ -1,27 +1,8 @@
-#include "include/blackjackgame.hpp"
-#include <iostream>
+#include "../include/blackjack_view.hpp"
 
-using namespace std;
-
+// Create the game and let its view handle terminal interaction.
 int main() {
-
-    cout << "Welcome to Deque Blackjack!\n";
-    cout << "Enter your player name: ";
-
-    string name;
-    getline(std::cin, name);
-
-    BlackjackGame game(name);
-
-    char playAgain = 'y';
-
-    while (playAgain == 'y' || playAgain == 'Y') {
-        game.play_round();
-        std::cout << "\nPlay another round? (y/n): ";
-        std::cin >> playAgain;
-    }
-
-    std::cout << "Thanks for playing!\n";
+    BlackjackGame game;
+    BlackjackView::run(game);
     return 0;
 }
-
