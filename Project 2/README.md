@@ -1,105 +1,107 @@
-# Deque Playground
+# Blackjack
 
-A terminal interface for one `std::deque<int>`. The deque is created in
-`main.cpp`; the controller holds a mutable reference, and the terminal view
-holds a const reference to the same deque. Neither owns a copy. Boxes show the
-logical ordering of elements, not the STL deque's physical memory arrangement.
+A blackjack-style terminal game built around one `std::deque<Card>`. Start with
+a $100 bankroll, place a bet, and try to beat the dealer without going over 21.
+You can draw from either end of the deck, peek at either end, or shuffle the
+remaining cards. These extra choices demonstrate how a deque works during play.
 
-This draft uses C++14, matching Project 1, with no third-party dependencies.
-Push, pop, peek, and clear have terminal animations. Advanced deque operations,
-the PDF report, and final submission packaging are outside this draft.
+FTXUI displays animated cards, hand totals, the remaining deck size, and action
+buttons. Hearts and diamonds are red; other text uses the terminal's default
+foreground. Peeks stay visible until a draw or shuffle changes the deck. The
+game's rules and cards are separate from the terminal presentation.
 
-## Presentation abstraction and inheritance
+## Run the game
 
-`DequeView` is an abstract base class with a virtual destructor and pure virtual
-`draw()` and `animate()` functions. `TerminalView` publicly inherits from it and
-overrides both functions. `DequeApplication` receives a `DequeView&` and calls
-those functions through the base reference, demonstrating runtime polymorphism.
-The terminal implementation contains the ASCII layout, ANSI controls, easing,
-timing, and terminal-size detection. The controller contains only deque operations.
+Extract the play ZIP and open its folder. No compiler or installation is needed.
 
-No view owns or copies a deque. For a valid operation, the application first asks
-the view to animate and then invokes the controller's STL operation once. A push
-uses its pending integer as an overlay; pop and clear read existing elements until
-the operation commits. Peek highlights the selected box without mutation. Frame
-buffers contain rendered characters only. Commands are processed one at a time.
+- Windows 10/11 x64: double-click `simple.exe`.
+- macOS 11 or newer, Intel or Apple Silicon: double-click `Start Blackjack.command`.
+- Linux x64: open a terminal in the folder and run `./blackjack`.
 
-## Build directly on the student cluster
+The play folder contains separate executables for these systems. Keep the entire
+folder together when copying it to another computer or a flash drive. The play
+ZIP is separate from the source checkout.
 
-From the repository root:
+## Requirements
 
-```sh
-cd "Project 2"
-mkdir -p build
-g++ -std=c++14 -Wall -Wextra -Wpedantic -Iinclude src/*.cpp -o build/deque_playground
-./build/deque_playground
-```
+- An interactive terminal, preferably at least 80 columns by 24 rows, with a font
+  that displays `♥ ♦ ♣ ♠`.
+- To build the source: a C++17 compiler. Windows builds use MinGW-w64 `g++`;
+  Linux/student-cluster and macOS builds use the installed C++ compiler.
+- FTXUI 7.0.3 is already bundled in `third_party/ftxui`. It is compiled into the
+  game, so no package manager, network access, or separate FTXUI installation is
+  needed.
 
-This needs a C++14-capable compiler. Cluster execution has not yet been verified.
-All includes use paths relative to this project, so the `Project 2` directory can
-also be built by itself. No CMake, package manager, or internet access is required.
+The `Project 2` folder can be copied and built independently of the rest of the
+repository. Executables must match the destination operating system and CPU;
+one Windows `.exe` cannot also run natively on macOS or Linux.
 
-For CLion, reload the root CMake project and select the `deque_playground` target.
-Project 1 keeps its existing target and language settings.
-Use CLion's terminal or another real terminal to see animations. The ordinary
-Run console generally uses plain output because it is not an interactive terminal.
+## How to play
 
-## Commands
+1. Enter your name and press Enter.
+2. Enter a whole-dollar bet between $1 and your available bankroll, then press
+   Enter. The opening deal gives you and the dealer two cards each.
+3. During your turn, press a number below, or use Tab/arrows and Enter to select
+   a button. The dealer's first card stays hidden during your turn.
+4. After the round, select **Play again** to place another bet, or **Quit**.
+   Play again is available while your bankroll is above zero.
 
-| Command | Effect |
+| Key | Action |
 | --- | --- |
-| `push_front 12` | Add 12 at the front. |
-| `push_back -4` | Add -4 at the back. |
-| `pop_front` / `pop_back` | Remove an end integer and report its value. |
-| `peek_front` / `peek_back` | Read `front()` / `back()` without removing it. |
-| `clear` | Remove all elements. |
-| `size` / `empty` | Query the main deque. |
-| `show` / `help` | Redraw the deque / explain commands. |
-| `quit` | Exit. End-of-input also exits cleanly. |
+| `1` | Stand and let the dealer play. |
+| `2` | Draw and remove the front card. |
+| `3` | Draw and remove the back card. |
+| `4` | Peek at the front card without removing it. |
+| `5` | Peek at the back card without removing it. |
+| `6` | Shuffle the remaining deck. |
+| `q` | Quit after entering your name. |
+| Esc | Quit at any time, including during an animation. |
 
-FIFO shortcuts: `push 12` means `push_back 12`, `pop` means `pop_front`, and
-`peek` means `peek_front`. Commands are case-sensitive. Integer arguments must
-be whole signed decimal values within the platform's `int` range. Empty pops
-and peeks, unknown commands, and extra arguments leave the deque unchanged.
+Aces count as 11 or 1 to avoid a bust; face cards count as 10. The dealer draws
+below 17 and stands on 17 or higher. A win pays even money, a loss costs your
+bet, and a tie returns it. Reaching 21 starts the dealer's turn automatically.
+An exhausted deck is refilled and shuffled before the next draw.
 
-Plain output wraps every box to the terminal width; indices appear beneath each box.
-Interactive output uses a fixed stage and menu so animations do not move the screen.
-`F/B` marks a single element that is both front and back. Interactive terminals
-redraw after each command. IDE consoles and redirected input/output use plain
-text automatically; `--plain` also forces this mode.
+Long hands scroll to show the newest card. Set the `NO_COLOR` environment
+variable to disable red suit colors. Quitting restores the terminal; no name,
+bankroll, cards, or session history is saved.
 
-Push boxes enter at the selected end; popped boxes leave while survivors shift
-as needed. Peek highlights the selected box with `=` borders; clear moves boxes
-off the stage together. Animations last about half a second at 20 frames per second,
-using the C++ standard library and sleeping between frames rather than busy waiting.
-The displayed size remains the true main deque size until the operation commits.
-For large deques, animation focuses on the affected end and identifies the visible
-indices; the settled interactive display keeps the same viewport and stage height.
-Result text is shortened to fit one screen row; plain output keeps the full text.
-Screens smaller than 40 columns or 18 rows use plain output and skip animation. No raw keyboard mode or cursor hiding
-is used, so quitting does not require restoring those terminal settings.
+## Deque and class design
 
-`--no-animation` skips transitions while keeping interactive screen redraws.
-`--plain` skips both transitions and screen clearing.
+`src/main.cpp` creates `BlackjackGame`, which owns the only deck deque.
+`BlackjackView` holds a reference to that game and reads the actual deck and
+hands through const references. It does not own or copy a deck. Each dealt card
+is transferred to a participant's hand, which is stored in a `std::vector<Card>`.
 
-Example:
+| Code | Responsibility |
+| --- | --- |
+| `include/card.hpp` | Stores a card's suit, rank, and value. |
+| `include/participant.hpp`, `src/participant.cpp` | Shared hand storage and ace-aware scoring. |
+| `include/playerdealer.hpp`, `src/playerdealer.cpp` | `Player` and `Dealer` inherit from `Participant`; they add betting and dealer behavior. |
+| `include/blackjackgame.hpp`, `src/blackjackgame.cpp` | Owns the deck, deals cards, controls rounds, and settles bets. |
+| `include/blackjack_view.hpp`, `src/blackjack_view.cpp` | Uses FTXUI for cards, input, buttons, and animations. |
 
-```sh
-printf 'push_back 12\npush_front -4\npeek_back\npop_front\nclear\nquit\n' \
-  | ./build/deque_playground --plain
-```
+`initialize_deck()` uses `clear()` and `push_back()` to fill the deque.
+`draw_from_front()` uses `front()` and `pop_front()`; `draw_from_back()` uses
+`back()` and `pop_back()`. Peeks read either end without removing cards.
+`std::shuffle` reorders the same deque through its iterators, while `empty()`
+and `size()` support refilling and the display.
 
-## Verification
+The project's own inheritance is `Participant` → `Player` and `Dealer`, sharing
+hand and scoring behavior. `BlackjackGame` and `BlackjackView` provide additional
+classes for game rules and presentation. `BlackjackView` also inherits from
+FTXUI's `ComponentBase` to handle rendering, input, and animation callbacks.
+All project headers are in one `include` folder.
 
-From `Project 2`, compile the behavioural checks without the application main:
+## Library credit and verification
 
-```sh
-g++ -std=c++14 -Wall -Wextra -Wpedantic -Iinclude \
-  tests/deque_tests.cpp src/deque_controller.cpp src/terminal_view.cpp \
-  src/deque_application.cpp -o build/deque_tests
-./build/deque_tests
-```
+[FTXUI 7.0.3](https://github.com/ArthurSonzogni/FTXUI/releases/tag/v7.0.3) is
+bundled as its unmodified amalgamated `ftxui.hpp` and `ftxui.cpp`, with its MIT
+license in `third_party/ftxui/LICENSE`. Keep that license with redistributed
+source and play copies. The group maintains the game and view code; FTXUI
+provides the terminal infrastructure.
 
-Specific `using` declarations make standard types and functions readable without
-repeating `std::` in expressions. `<iostream>` supplies the stream declarations;
-other standard headers are included for their corresponding facilities.
+Source compilation and interactive play have been verified on Apple Silicon
+macOS, including building from a copied source folder. Windows x64 and Linux
+x64 play binaries were built and their dependencies checked, but native
+execution on those platforms and the student cluster has not yet been verified.

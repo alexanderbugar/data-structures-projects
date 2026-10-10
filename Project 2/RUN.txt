@@ -27,7 +27,7 @@ deck is refilled automatically. Choose Play again after a round, or Quit.
 Q quits after entering your name; Esc quits at any time, including animations.
 Resize your terminal for more room. Long hands scroll to show the latest card.
 Hearts and diamonds are red; other text uses your terminal's default foreground.
-Set NO_COLOR to disable suit colours.
+Set NO_COLOR to disable suit colors.
 
 THIRD-PARTY CREDIT
 FTXUI 7.0.3 provides terminal layout, input, and animation. Its unmodified
@@ -35,12 +35,3 @@ ftxui.hpp and ftxui.cpp are bundled with the MIT license in third_party/ftxui.
 Source: https://github.com/ArthurSonzogni/FTXUI/releases/tag/v7.0.3
 Amalgamated archive SHA-256:
 63d13bb65747bdbf0edf04d83ce490708022371cf378f15fad8489249ea4fd9a
-
-SUBMISSION
-The source folder supplies the required program code. Include these sources,
-the bundled library/license, and build instructions with your group's PDF.
-Exclude executables, build caches, and IDE files from the source submission.
-The PDF still needs group names, the project title, run/use instructions,
-a 1–2 paragraph description, deque and inheritance explanations with file names
-and line numbers, contribution percentages, and the exact integrity statement
-from the assignment rubric. Explain our game classes, not the library internals.
