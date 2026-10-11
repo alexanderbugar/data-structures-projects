@@ -1,0 +1,72 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist{nosep,leftmargin=1.5em}
+\pagestyle{plain}
+\setlength{\emergencystretch}{4em}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE\bfseries Blackjack\par}
+    \vspace{5pt}
+    {\large University of South Florida\par}
+    \vspace{10pt}
+    {\bfseries Group Members\par}
+    Alexander Bugar\\
+    Hector Colon\\
+    Liam Dzanan\\
+    Seth Wisniewski
+\end{center}
+
+\section*{Program Description}
+Our program is a blackjack game played in the terminal. The player starts with \$100, places a bet, and tries to beat the dealer without going over 21. The player can draw from the front or back of the deck, peek at either end, or shuffle the remaining cards. These extra options show how a deque works while playing the game.
+
+\section*{Instructions to Run}
+Extract the source folder and open a terminal in \texttt{Project 2}. With CMake and a C++17 compiler installed, run:
+\begin{verbatim}
+cmake -S . -B build
+cmake --build build
+./build/blackjack
+\end{verbatim}
+On the student cluster, Linux, or macOS, you can also run \texttt{sh build.sh}, then \texttt{./blackjack}. On Windows with MinGW-w64, run \texttt{build.bat}, then \texttt{simple.exe}.
+
+\section*{Instructions to Interact}
+Enter your name, then enter a whole-dollar bet between \$1 and your balance. Press Enter after each input. You and the dealer each receive two cards. During your turn, use the following keys or select a button with Tab/arrows and Enter:
+\begin{enumerate}
+    \item \textbf{Stand:} End your turn and let the dealer play.
+    \item \textbf{Draw front:} Remove the front card of the deque and add it to your hand.
+    \item \textbf{Draw back:} Remove the back card of the deque and add it to your hand.
+    \item \textbf{Peek front:} Show the front card without removing it.
+    \item \textbf{Peek back:} Show the back card without removing it.
+    \item \textbf{Shuffle:} Shuffle the remaining cards. Drawing or shuffling clears peeks.
+\end{enumerate}
+Aces count as 11 or 1, and face cards count as 10. The dealer draws below 17 and stands at 17 or higher. Wins pay even money, losses cost your bet, and ties return it. After a round, choose \texttt{Play again} or \texttt{Quit}. Press \texttt{q} after entering your name, or Esc at any time, to quit.
+
+\newpage
+\section*{Implementation Explanation}
+The deck uses the standard library's \texttt{std::deque}. The program fills it with 52 cards, and drawing removes a card from the front or back. Peeking shows a card without removing it, and shuffling changes the order of the remaining cards. If the deck runs out, the program fills it again.
+
+Player and Dealer inherit from Participant, sharing the same hand storage and scoring. Player handles betting, and Dealer decides when to draw. BlackjackGame manages the deck and rounds, while BlackjackView handles the display and controls.
+
+\section*{Included Files and Library}
+The folder includes the source code, build scripts, and run instructions. FTXUI is a third-party library used for the terminal display and animations. Its header, source file, and MIT license are included in the project. It compiles with our code, so no separate library installation is needed.
+
+\section*{Distribution of Work}
+\begin{tabular}{@{}ll@{}}
+    Alexander Bugar & \textbf{25\%} \\
+    Hector Colon & \textbf{25\%} \\
+    Liam Dzanan & \textbf{25\%} \\
+    Seth Wisniewski & \textbf{25\%}
+\end{tabular}
+
+\section*{Academic Integrity Statement}
+We understand that there will be no tolerance towards academic dishonesty, and that cheating will lead to an academic referral. We are aware of the identified behaviors that are considered violations of the academic standards for Undergraduate and Graduate students per USF policy.
+
+\end{document}
