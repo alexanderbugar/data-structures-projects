@@ -3,3 +3,4 @@ project(data_structures_projects LANGUAGES CXX)
 
 add_subdirectory("Project 1")
 add_subdirectory("Project 2")
+add_subdirectory("Project 3")

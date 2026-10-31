@@ -1,0 +1,7 @@
+0 1 Are you nervous?
+1 2 Yes Savings account
+1 3 No Will you need to access most of the money within the next 5 years?
+2 4 Yes Money market fund
+2 5 No Are you willing to accept risks in exchange for higher expected returns?
+3 6 Yes Stock portfolio
+3 7 No Diversified portfolio with stocks, bonds, and short-term instruments
