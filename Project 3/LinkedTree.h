@@ -6,21 +6,22 @@
 
 class LinkedTree {
 public:
-    // Starts with an empty tree; the destructor releases every linked node.
+    // Start with an empty tree.
     LinkedTree() = default;
+    // Free all of the nodes when the tree is done being used.
     ~LinkedTree();
 
-    // Each tree owns its nodes, so copying it is disabled.
+    // Prevent copies so two trees do not try to delete the same nodes.
     LinkedTree(const LinkedTree&) = delete;
     LinkedTree& operator=(const LinkedTree&) = delete;
 
-    // Reads node records and connects them using their levels and preorder positions.
+    // Read the file and connect the nodes using their levels and positions.
     void loadFromFile(const std::string& filename);
 
-    // Writes the indented tree, preorder lists, and tree properties.
+    // Write the tree, node lists, and properties to the output stream.
     void writeReport(std::ostream& output) const;
 
-    // Prints a node and one available relative of each kind; false means not found.
+    // Show a node and its relatives. Return false if the position is not found.
     bool printNodeInfo(int position, std::ostream& output) const;
 
 private:
@@ -29,6 +30,7 @@ private:
         std::string edgeLabel;
         std::string content;
         Node* parent = nullptr;
+        // Children are linked together so a node can have more than two.
         Node* firstChild = nullptr;
         Node* nextSibling = nullptr;
     };
@@ -45,19 +47,19 @@ private:
 
     Node* root = nullptr;
 
-    // Deletes a node after deleting all of its children.
+    // Delete the children before deleting their parent.
     static void deleteSubtree(Node* node);
 
-    // Searches the linked tree in preorder for a file position.
+    // Search the tree for the position given in the file.
     static const Node* findNode(const Node* node, int position);
 
-    // Prints two dashes per level and the incoming edge label for non-root nodes.
+    // Display the tree with two dashes per level and labels in brackets.
     static void printTree(const Node* node, int level, std::ostream& output);
 
-    // Lists either internal nodes or leaves in preorder, including their positions.
+    // List either internal nodes or leaves in preorder.
     static void printNodeList(const Node* node, bool internal, std::ostream& output);
 
-    // Combines child results to count nodes and check the tree's shape.
+    // Count the nodes, find the height, and check the tree's shape.
     static Statistics analyze(const Node* node);
 };
 
