@@ -8,7 +8,7 @@
 
 using namespace std;
 
-// Loads the chosen file, saves its report, and lets the user explore node positions.
+// Load the tree file, save its report, and let the user look up nodes by position.
 int main() {
     cout << "Tree file: ";
     string filename;
@@ -17,6 +17,8 @@ int main() {
     try {
         LinkedTree tree;
         tree.loadFromFile(filename);
+
+        // Finish writing the report before asking the user for a node.
         ofstream report("about_tree.txt");
         if (!report) throw runtime_error("Unable to create about_tree.txt.");
         tree.writeReport(report);
@@ -33,6 +35,7 @@ int main() {
             string choice, extra;
             if ((words >> choice) && choice == "exit" && !(words >> extra)) break;
 
+            // Only accept one whole number, so inputs like "2 extra" do not pass.
             istringstream positionInput(input);
             int position;
             if (!(positionInput >> position) || (positionInput >> extra) ||

@@ -1,0 +1,76 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{enumitem}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist{nosep,leftmargin=1.5em}
+\pagestyle{plain}
+\setlength{\emergencystretch}{4em}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE\bfseries Decision Trees\par}
+    \vspace{5pt}
+    {\large University of South Florida\par}
+    \vspace{5pt}
+    {\bfseries Group: GGGamers\par}
+    \vspace{10pt}
+    {\bfseries Group Members\par}
+    Alexander Bugar\\
+    Hector Colon\\
+    Liam Dzanan\\
+    Seth Wisniewski
+\end{center}
+
+\section*{Program Description}
+Our program reads a decision tree from a text file and builds it using linked nodes. It saves a report showing the tree, its properties, and the internal and leaf nodes in preorder. The user can then look up a node by its position to see its content and related nodes. The included files contain decisions about buying a car and choosing an investment.
+
+\section*{Instructions to Run on the Student Cluster}
+Extract the source folder and open a terminal in \texttt{Project 3}. With CMake and a C++17 compiler installed, run:
+\begin{verbatim}
+cmake -S . -B build
+cmake --build build
+./build/decision_tree
+\end{verbatim}
+You can also compile and run directly with:
+\begin{verbatim}
+g++ -std=c++17 main.cpp LinkedTree.cpp -o decision_tree
+./decision_tree
+\end{verbatim}
+Keep the tree files in the folder where you run the program, or enter the full path to a file.
+
+\section*{Instructions to Interact}
+Press Enter after each input.
+\begin{enumerate}
+    \item \textbf{Choose a file:} Enter \texttt{tree-car.txt}, \texttt{tree-investment.txt}, or the path to another valid tree file.
+    \item \textbf{Read the report:} Open \texttt{about\_tree.txt} in the folder where you ran the program. Each run replaces the previous report.
+    \item \textbf{Explore a node:} Enter its preorder position from the file or report. The program shows the node's content, one ancestor, one descendant, and one sibling. It prints \texttt{None} when that relative does not exist.
+    \item \textbf{Exit:} Enter \texttt{exit} to end the program. An invalid position or other input displays an error and lets you try again.
+\end{enumerate}
+
+\newpage
+\section*{Implementation Explanation}
+Each node in \texttt{LinkedTree} stores its position, edge label, content, and pointers to its parent, first child, and next sibling. Linking siblings together allows a node to have more than two children. The program sorts the file records by preorder position, then uses their levels to connect each node to its parent.
+
+Recursive functions print the tree, list the nodes, and calculate its properties. The height counts edges on the longest path from the root to a leaf. A binary tree has at most two children per node. It is proper if every internal node has two children, perfect if it is also full at every level, and balanced if the two subtree heights differ by at most one at every node. The destructor deletes the nodes when the program ends.
+
+\section*{Included Files}
+The folder includes \texttt{main.cpp}, \texttt{LinkedTree.h}, \texttt{LinkedTree.cpp}, \texttt{CMakeLists.txt}, and the two sample tree files. The program uses the C++ standard library and does not need a separate library installation.
+
+\section*{Distribution of Work}
+\begin{tabular}{@{}ll@{}}
+    Alexander Bugar & \textbf{25\%} \\
+    Hector Colon & \textbf{25\%} \\
+    Liam Dzanan & \textbf{25\%} \\
+    Seth Wisniewski & \textbf{25\%}
+\end{tabular}
+
+\section*{Academic Integrity Statement}
+We understand that there will be no tolerance towards academic dishonesty, and that cheating will lead to an academic referral. We are aware of the identified behaviors that are considered violations of the academic standards for Undergraduate and Graduate students per USF policy.
+
+\end{document}
