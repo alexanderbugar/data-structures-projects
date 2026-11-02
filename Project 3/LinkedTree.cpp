@@ -80,6 +80,23 @@ LinkedTree::~LinkedTree() {
     deleteSubtree(root);
 }
 
+// Return a separate copy so the display cannot change the linked tree.
+vector<LinkedTree::NodeInfo> LinkedTree::nodes() const {
+    vector<NodeInfo> result;
+    if (root) collectNodes(root, -1, result);
+    return result;
+}
+
+// Remember each child's index while visiting the nodes in preorder.
+void LinkedTree::collectNodes(const Node* node, int parent, vector<NodeInfo>& result) {
+    int index = static_cast<int>(result.size());
+    result.push_back({node->position, node->edgeLabel, node->content, parent, {}});
+    if (parent >= 0) result[parent].children.push_back(index);
+    for (const Node* child = node->firstChild; child; child = child->nextSibling) {
+        collectNodes(child, index, result);
+    }
+}
+
 // Delete each child's subtree before deleting the current node.
 void LinkedTree::deleteSubtree(Node* node) {
     if (!node) return;

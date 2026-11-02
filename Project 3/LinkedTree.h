@@ -3,9 +3,22 @@
 
 #include <ostream>
 #include <string>
+#include <vector>
 
 class LinkedTree {
 public:
+    // A read-only copy of a node for displays. Parent and children are list indexes.
+    struct NodeInfo {
+        int position;
+        std::string edgeLabel;
+        std::string content;
+        int parent;
+        std::vector<int> children;
+    };
+
+    // Copy the nodes in preorder without exposing the tree's pointers.
+    std::vector<NodeInfo> nodes() const;
+
     // Start with an empty tree.
     LinkedTree() = default;
     // Free all of the nodes when the tree is done being used.
@@ -46,6 +59,9 @@ private:
     };
 
     Node* root = nullptr;
+
+    // Add a node and its children to the display copy.
+    static void collectNodes(const Node* node, int parent, std::vector<NodeInfo>& result);
 
     // Delete the children before deleting their parent.
     static void deleteSubtree(Node* node);
