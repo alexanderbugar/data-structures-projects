@@ -35,7 +35,7 @@ Extract the source folder and open a terminal in \texttt{Project 3}. With CMake 
 \begin{verbatim}
 cmake -S . -B build
 cmake --build build
-./build/decision_tree
+./build/decision_tree --plain
 \end{verbatim}
 You can also compile and run directly with:
 \begin{verbatim}
@@ -60,7 +60,10 @@ Each node in \texttt{LinkedTree} stores its position, edge label, content, and p
 Recursive functions print the tree, list the nodes, and calculate its properties. The height counts edges on the longest path from the root to a leaf. A binary tree has at most two children per node. It is proper if every internal node has two children, perfect if it is also full at every level, and balanced if the two subtree heights differ by at most one at every node. The destructor deletes the nodes when the program ends.
 
 \section*{Included Files}
-The folder includes \texttt{main.cpp}, \texttt{LinkedTree.h}, \texttt{LinkedTree.cpp}, \texttt{CMakeLists.txt}, and the two sample tree files. The program uses the C++ standard library and does not need a separate library installation.
+The folder includes the source code, two sample tree files, and \texttt{RUN.txt}. The core tree uses only the C++ standard library. The optional interface is in \texttt{ui/} and reuses the FTXUI library included with Project 2. For a separate folder without that library, add \texttt{-DDECISION\_TREE\_UI=OFF} to the CMake configuration command.
+
+\section*{Tree Interface}
+Omit \texttt{--plain} to open the keyboard menu. Choose a file, then select a walkthrough or browse the nodes. Use the arrow keys and Enter to pick an answer, including any labels besides Yes and No. Left arrow goes back, \texttt{r} restarts, and Esc returns to the menu. The colored diagram follows the selected node and adjusts to the terminal size. Ctrl+arrows scroll the map, and \texttt{c} centers it again.
 
 \section*{Distribution of Work}
 \begin{tabular}{@{}ll@{}}

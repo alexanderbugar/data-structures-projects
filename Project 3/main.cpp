@@ -8,8 +8,12 @@
 
 using namespace std;
 
+#ifdef DECISION_TREE_UI
+#include "ui/TreeView.h"
+#endif
+
 // Load the tree file, save its report, and let the user look up nodes by position.
-int main() {
+int runConsole() {
     try {
         LinkedTree tree;
 
@@ -58,4 +62,16 @@ int main() {
         return 1;
     }
     return 0;
+}
+
+// Use the menu in a terminal, or keep the original console for redirected input.
+int main(int argc, char* argv[]) {
+    if (argc > 2 || (argc == 2 && string(argv[1]) != "--plain")) {
+        cerr << "Usage: decision_tree [--plain]\n";
+        return 1;
+    }
+#ifdef DECISION_TREE_UI
+    if (argc == 1 && tree_ui::hasTerminal()) return tree_ui::run();
+#endif
+    return runConsole();
 }

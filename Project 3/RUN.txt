@@ -1,0 +1,35 @@
+From the Project 3 folder:
+
+cmake -S . -B build
+cmake --build build
+./build/decision_tree
+
+Enter a tree filename or full path, then press Enter. Use the up/down arrows
+and Enter to choose a menu option or answer. Answers come from the file,
+including choices such as Sometimes. A leaf shows the final decision.
+
+Left arrow or Backspace goes to the parent. R restarts at the root.
+Esc returns to the menu; Esc from the menu or Q quits. In the filename
+field, Esc returns or quits and all other typing edits the filename.
+
+Explore all nodes lists the nodes in preorder. Up/down selects a node,
+left/right moves to its parent/first child, and Enter starts a walkthrough
+from that node. The diagram follows the selection. Ctrl+arrows scroll the
+map; C centers it again. Resize the terminal to change the layout. On a
+small terminal the controls stay available while the map is hidden.
+
+The program writes about_tree.txt in the current folder when a file loads.
+Use ./build/decision_tree --plain for the original position-based console.
+Redirected input or output also uses the plain console automatically.
+
+The UI reuses the FTXUI copy and license in Project 2/third_party/ftxui.
+No download or separate installation is needed when building this repository.
+For a separate source folder, include that library folder and configure with
+-DFTXUI_DIR=/path/to/ftxui, or build without the UI:
+
+cmake -S . -B build-plain -DDECISION_TREE_UI=OFF
+cmake --build build-plain
+./build-plain/decision_tree
+
+The original direct compiler command still builds the plain console:
+g++ -std=c++17 main.cpp LinkedTree.cpp -o decision_tree
