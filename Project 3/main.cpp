@@ -10,13 +10,22 @@ using namespace std;
 
 // Load the tree file, save its report, and let the user look up nodes by position.
 int main() {
-    cout << "Tree file: ";
-    string filename;
-    if (!getline(cin, filename)) return 0;
-
     try {
         LinkedTree tree;
-        tree.loadFromFile(filename);
+
+        // Keep asking for a file until a tree loads or the input ends.
+        while (true) {
+            cout << "Tree file: ";
+            string filename;
+            if (!getline(cin, filename)) return 0;
+
+            try {
+                tree.loadFromFile(filename);
+                break;
+            } catch (const runtime_error& error) {
+                cout << "Error: " << error.what() << "\nPlease try again.\n";
+            }
+        }
 
         // Finish writing the report before asking the user for a node.
         ofstream report("about_tree.txt");
