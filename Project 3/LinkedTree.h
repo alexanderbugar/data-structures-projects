@@ -7,7 +7,7 @@
 
 class LinkedTree {
 public:
-    // A read-only copy of a node for displays. Parent and children are list indexes.
+    // a read-only copy of a node for displays. parent and children are list indexes.
     struct NodeInfo {
         int position;
         std::string edgeLabel;
@@ -16,25 +16,25 @@ public:
         std::vector<int> children;
     };
 
-    // Copy the nodes in preorder without exposing the tree's pointers.
+    // copy the nodes in preorder without exposing the tree's pointers.
     std::vector<NodeInfo> nodes() const;
 
-    // Start with an empty tree.
+    // start with an empty tree.
     LinkedTree() = default;
-    // Free all of the nodes when the tree is done being used.
+    // free all of the nodes when the tree is done being used.
     ~LinkedTree();
 
-    // Prevent copies so two trees do not try to delete the same nodes.
+    // prevent copies so two trees do not try to delete the same nodes.
     LinkedTree(const LinkedTree&) = delete;
     LinkedTree& operator=(const LinkedTree&) = delete;
 
-    // Read the file and connect the nodes using their levels and positions.
+    // read the file and connect the nodes using their levels and positions.
     void loadFromFile(const std::string& filename);
 
-    // Write the tree, node lists, and properties to the output stream.
+    // write the tree, node lists, and properties to the output stream.
     void writeReport(std::ostream& output) const;
 
-    // Show a node and its relatives. Return false if the position is not found.
+    // show a node and its relatives. return false if the position is not found.
     bool printNodeInfo(int position, std::ostream& output) const;
 
 private:
@@ -43,7 +43,7 @@ private:
         std::string edgeLabel;
         std::string content;
         Node* parent = nullptr;
-        // Children are linked together so a node can have more than two.
+        // children are linked together so a node can have more than two.
         Node* firstChild = nullptr;
         Node* nextSibling = nullptr;
     };
@@ -60,22 +60,22 @@ private:
 
     Node* root = nullptr;
 
-    // Add a node and its children to the display copy.
+    // add a node and its children to the display copy.
     static void collectNodes(const Node* node, int parent, std::vector<NodeInfo>& result);
 
-    // Delete the children before deleting their parent.
+    // delete the children before deleting their parent.
     static void deleteSubtree(Node* node);
 
-    // Search the tree for the position given in the file.
+    // search the tree for the position given in the file.
     static const Node* findNode(const Node* node, int position);
 
-    // Display the tree with two dashes per level and labels in brackets.
+    // display the tree with two dashes per level and labels in brackets.
     static void printTree(const Node* node, int level, std::ostream& output);
 
-    // List either internal nodes or leaves in preorder.
+    // list either internal nodes or leaves in preorder.
     static void printNodeList(const Node* node, bool internal, std::ostream& output);
 
-    // Count the nodes, find the height, and check the tree's shape.
+    // count the nodes, find the height, and check the tree's shape.
     static Statistics analyze(const Node* node);
 };
 

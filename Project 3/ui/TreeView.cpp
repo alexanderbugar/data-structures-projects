@@ -34,7 +34,7 @@ public:
         Add(menu);
     }
 
-    // Only the filename field or the current menu receives keyboard focus.
+    // only the filename field or the current menu receives keyboard focus.
     Component ActiveChild() override { return page == Page::File ? input : menu; }
 
     bool OnEvent(Event event) override {
@@ -70,7 +70,7 @@ public:
         return menu->OnEvent(event);
     }
 
-    // Reflow the panels when the terminal changes size.
+    // reflow the panels when the terminal changes size.
     Element OnRender() override {
         const auto background = Color::RGB(22, 24, 29);
         const auto foreground = Color::RGB(222, 222, 216);
@@ -146,7 +146,7 @@ private:
     int selected = 0, choice = 0, panX = 0, panY = 0;
     Component input, menu;
 
-    // Leave a failed filename in the field so it can be corrected and retried.
+    // leave a failed filename in the field so it can be corrected and retried.
     void load() {
         try {
             auto next = make_unique<LinkedTree>();
@@ -166,13 +166,13 @@ private:
         }
     }
 
-    // Recenter the map when moving to another node.
+    // recenter the map when moving to another node.
     void select(int index) {
         selected = index;
         panX = panY = 0;
     }
 
-    // Reuse one menu for the main actions, answers, and preorder node list.
+    // reuse one menu for the main actions, answers, and preorder node list.
     void show(Page next) {
         page = next;
         choice = 0;
@@ -189,7 +189,7 @@ private:
         ActiveChild()->TakeFocus();
     }
 
-    // Follow the selected edge instead of assuming every tree only has Yes and No.
+    // follow the selected edge instead of assuming every tree only has yes and no.
     void choose() {
         if (page == Page::Menu) {
             switch (choice) {

@@ -17,7 +17,7 @@ namespace {
         string content;
     };
 
-    // Remove extra whitespace from the start and end of a line or field.
+    // remove extra whitespace from the start and end of a line or field.
     string trim(const string& text) {
         size_t first = text.find_first_not_of(" \t\r\n");
         if (first == string::npos) return "";
@@ -25,7 +25,7 @@ namespace {
         return text.substr(first, last - first + 1);
     }
 
-    // Read a whole number and reject extra text or numbers that do not fit in an int.
+    // read a whole number and reject extra text or numbers that do not fit in an int.
     int readInteger(const string& text) {
         istringstream input(text);
         int value;
@@ -36,7 +36,7 @@ namespace {
         return value;
     }
 
-    // Read one node from either a tab-separated file or the provided space-separated files.
+    // read one node from either a tab-separated file or the provided space-separated files.
     TreeRecord readRecord(const string& line, bool rootLine) {
         TreeRecord record;
         istringstream input(line);
@@ -47,7 +47,7 @@ namespace {
                 record.position = position;
                 getline(input, record.content);
             } else {
-                // The first line can also contain just the root's question or text.
+                // the first line can also contain just the root's question or text.
                 record.content = line;
             }
         } else if (line.find('\t') != string::npos) {
@@ -75,19 +75,19 @@ namespace {
     }
 }
 
-// Free the tree's nodes when the object is destroyed.
+// free the tree's nodes when the object is destroyed.
 LinkedTree::~LinkedTree() {
     deleteSubtree(root);
 }
 
-// Return a separate copy so the display cannot change the linked tree.
+// return a separate copy so the display cannot change the linked tree.
 vector<LinkedTree::NodeInfo> LinkedTree::nodes() const {
     vector<NodeInfo> result;
     if (root) collectNodes(root, -1, result);
     return result;
 }
 
-// Remember each child's index while visiting the nodes in preorder.
+// remember each child's index while visiting the nodes in preorder.
 void LinkedTree::collectNodes(const Node* node, int parent, vector<NodeInfo>& result) {
     int index = static_cast<int>(result.size());
     result.push_back({node->position, node->edgeLabel, node->content, parent, {}});
@@ -97,7 +97,7 @@ void LinkedTree::collectNodes(const Node* node, int parent, vector<NodeInfo>& re
     }
 }
 
-// Delete each child's subtree before deleting the current node.
+// delete each child's subtree before deleting the current node.
 void LinkedTree::deleteSubtree(Node* node) {
     if (!node) return;
     Node* child = node->firstChild;
@@ -109,7 +109,7 @@ void LinkedTree::deleteSubtree(Node* node) {
     delete node;
 }
 
-// Read the node information, check it, and build the linked tree.
+// read the node information, check it, and build the linked tree.
 void LinkedTree::loadFromFile(const string& filename) {
     ifstream input(filename);
     if (!input) throw runtime_error("Unable to open tree file: " + filename);
@@ -130,12 +130,12 @@ void LinkedTree::loadFromFile(const string& filename) {
     if (input.bad()) throw runtime_error("Unable to finish reading the tree file.");
     if (records.empty()) throw runtime_error("The tree file is empty.");
 
-    // The provided files are grouped by level, so sort by preorder position first.
+    // the provided files are grouped by level, so sort by preorder position first.
     sort(records.begin(), records.end(), [](const TreeRecord& a, const TreeRecord& b) {
         return a.position < b.position;
     });
 
-    // A child must have a parent one level above it, and positions cannot repeat.
+    // a child must have a parent one level above it, and positions cannot repeat.
     for (size_t i = 0; i < records.size(); ++i) {
         if (i == 0 && records[i].level != 0) {
             throw runtime_error("The root must have the first preorder position.");
@@ -148,7 +148,7 @@ void LinkedTree::loadFromFile(const string& filename) {
 
     deleteSubtree(root);
     root = nullptr;
-    // Keep the path to the current node so each new node can find its parent.
+    // keep the path to the current node so each new node can find its parent.
     vector<Node*> ancestors;
     for (const TreeRecord& record : records) {
         Node* parent = record.level == 0 ? nullptr : ancestors[record.level - 1];
@@ -159,7 +159,7 @@ void LinkedTree::loadFromFile(const string& filename) {
         } else if (!parent->firstChild) {
             parent->firstChild = node;
         } else {
-            // Add the new child after the parent's existing children.
+            // add the new child after the parent's existing children.
             Node* lastChild = parent->firstChild;
             while (lastChild->nextSibling) lastChild = lastChild->nextSibling;
             lastChild->nextSibling = node;
@@ -170,7 +170,7 @@ void LinkedTree::loadFromFile(const string& filename) {
     }
 }
 
-// Check this node first, then search through each child's subtree.
+// check this node first, then search through each child's subtree.
 const LinkedTree::Node* LinkedTree::findNode(const Node* node, int position) {
     if (!node || node->position == position) return node;
     for (const Node* child = node->firstChild; child; child = child->nextSibling) {
@@ -180,7 +180,7 @@ const LinkedTree::Node* LinkedTree::findNode(const Node* node, int position) {
     return nullptr;
 }
 
-// Print the node's label and content, adding more dashes for each level.
+// print the node's label and content, adding more dashes for each level.
 void LinkedTree::printTree(const Node* node, int level, ostream& output) {
     output << string(2 * level, '-');
     if (node->parent) output << '[' << node->edgeLabel << "] ";
@@ -190,7 +190,7 @@ void LinkedTree::printTree(const Node* node, int level, ostream& output) {
     }
 }
 
-// Walk through the tree in preorder and print the requested type of node.
+// walk through the tree in preorder and print the requested type of node.
 void LinkedTree::printNodeList(const Node* node, bool internal, ostream& output) {
     if ((node->firstChild != nullptr) == internal) {
         output << node->position << ": " << node->content << '\n';
@@ -200,11 +200,11 @@ void LinkedTree::printNodeList(const Node* node, bool internal, ostream& output)
     }
 }
 
-// Combine the results from each subtree to find the counts, height, and tree types.
+// combine the results from each subtree to find the counts, height, and tree types.
 LinkedTree::Statistics LinkedTree::analyze(const Node* node) {
     Statistics result;
     if (!node->firstChild) {
-        // A leaf counts as one external node and has a height of zero.
+        // a leaf counts as one external node and has a height of zero.
         result.leafNodes = 1;
         return result;
     }
@@ -231,12 +231,12 @@ LinkedTree::Statistics LinkedTree::analyze(const Node* node) {
     result.binary = result.binary && childCount <= 2;
     result.proper = result.proper && childCount == 2;
     result.perfect = result.perfect && result.proper && firstHeight == secondHeight;
-    // Use -1 for a missing child and check the height difference at every node.
+    // use -1 for a missing child and check the height difference at every node.
     result.balanced = result.balanced && result.binary && abs(firstHeight - secondHeight) <= 1;
     return result;
 }
 
-// Write all the required tree information to the report.
+// write all the required tree information to the report.
 void LinkedTree::writeReport(ostream& output) const {
     if (!root) throw runtime_error("No tree is loaded.");
     Statistics stats = analyze(root);
@@ -263,13 +263,13 @@ void LinkedTree::writeReport(ostream& output) const {
     }
 }
 
-// Show the node, its parent, its first child, and one sibling when they exist.
+// show the node, its parent, its first child, and one sibling when they exist.
 bool LinkedTree::printNodeInfo(int position, ostream& output) const {
     const Node* node = findNode(root, position);
     if (!node) return false;
 
     const Node* sibling = node->parent ? node->parent->firstChild : nullptr;
-    // Skip the node itself when looking for a sibling.
+    // skip the node itself when looking for a sibling.
     if (sibling == node) sibling = sibling->nextSibling;
     output << "Node's content: " << node->content << '\n'
            << "Ancestor: " << (node->parent ? node->parent->content : "None") << '\n'
