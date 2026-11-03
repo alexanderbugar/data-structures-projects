@@ -1,112 +1,128 @@
 \documentclass[11pt,letterpaper]{article}
-
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.8in]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage{enumitem}
 \usepackage{graphicx}
-\usepackage{pdflscape}
-
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\definecolor{accent}{HTML}{36576B}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{5pt}
+\setlength{\parskip}{6pt}
+\setlength{\emergencystretch}{3em}
 \setlist{nosep,leftmargin=1.5em}
-\pagestyle{plain}
-\setlength{\emergencystretch}{4em}
-
+\titleformat{\section}{\large\bfseries\color{accent}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small GGGamers / Project 3}
+\fancyhead[R]{\small Decision Trees}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{14pt}
+\newcommand{\shot}[3]{\begin{center}\begin{minipage}{\linewidth}\centering\includegraphics[width=#2\linewidth,keepaspectratio]{images/#1}\par\vspace{3pt}{\small\color{accent}#3}\end{minipage}\end{center}}
 \begin{document}
+\raggedright
+{\Huge\bfseries Decision Trees}\par
+{\large University of South Florida \enspace / \enspace Project 3}\par
+\textbf{GGGamers}\par
+Alexander Bugar \enspace\textperiodcentered\enspace Hector Colon\\
+Liam Dzanan \enspace\textperiodcentered\enspace Seth Wisniewski
 
-\begin{center}
-    {\LARGE\bfseries Decision Trees\par}
-    \vspace{5pt}
-    {\large University of South Florida\par}
-    \vspace{5pt}
-    {\bfseries Group: GGGamers\par}
-    \vspace{10pt}
-    {\bfseries Group Members\par}
-    Alexander Bugar\\
-    Hector Colon\\
-    Liam Dzanan\\
-    Seth Wisniewski
-\end{center}
+\section*{What the program does}
+Our program loads a decision tree from a text file. You can follow its questions to a decision or browse individual nodes. The terminal draws the tree and highlights the path to the selected node. We included examples for buying a car and choosing an investment. Each successful load also writes a report to \texttt{about\_tree.txt}.
 
-\section*{Program Description}
-Our program reads a decision tree from a file and lets the user follow its questions or browse its nodes. The terminal shows connected boxes for the nodes and highlights the current path. The included trees cover buying a car and choosing an investment. Loading a file also saves the tree's properties in \texttt{about\_tree.txt}.
-
-\section*{Instructions to Run on the Student Cluster}
-With CMake and a C++17 compiler installed, open a terminal in \texttt{Project 3} and run:
+\section*{Build and run on the student cluster}
+From the \texttt{Project 3} folder, use CMake and a C++17 compiler:
 \begin{verbatim}
 cmake -S . -B build
 cmake --build build
 ./build/decision_tree
 \end{verbatim}
-The interface uses the FTXUI files already included in \texttt{Project 2/third\_party/ftxui}. Keep both project folders together, or set \texttt{-DFTXUI\_DIR=/path/to/ftxui} when configuring CMake. No library download is needed.
+Keep \texttt{Project 2/third\_party/ftxui} in the repository: the interface uses the library already stored there, so no download is needed. If the library is elsewhere, add \texttt{-DFTXUI\_DIR=/path/to/ftxui} to the first command.
 
-\section*{Instructions to Interact}
-\begin{enumerate}
-    \item \textbf{Open a file:} Enter \texttt{tree-car.txt}, \texttt{tree-investment.txt}, or a full path, then press Enter. If the file cannot load, correct the name and try again.
-    \item \textbf{Walk through questions:} Use up/down and Enter to choose an answer. The choices come from the file, so they can include labels like Sometimes. A leaf shows the final decision.
-    \item \textbf{Explore all nodes:} Use up/down to browse nodes in preorder. Left/right moves to a parent or first child. Enter starts a walkthrough from the selected node.
-    \item \textbf{Move or restart:} Left arrow or Backspace goes to the parent. Press \texttt{r} to restart, Ctrl+arrows to scroll the diagram, and \texttt{c} to center it. Resizing the terminal adjusts the layout.
-    \item \textbf{Return or quit:} Esc returns to the menu, where another file can be opened. Press \texttt{q}, or Esc from the main menu, to quit. Use Esc to leave the filename field.
-\end{enumerate}
+\section*{Open a tree}
+Enter \texttt{tree-car.txt}, \texttt{tree-investment.txt}, or a full file path and press Enter. If loading fails, the filename stays in the field so you can correct it.
+\shot{open-file.png}{0.60}{Figure 1. The filename field before loading the car example.}
 
 \newpage
-\section*{Report and Plain Console}
-Each successful load replaces \texttt{about\_tree.txt} in the current folder. The report includes the indented tree, root, node counts, height, preorder lists, and binary tree checks. The sample files produce these results:
+\section*{Using the interface}
+After a file loads, choose \textbf{Walk through questions} to answer one question at a time, or \textbf{Explore all nodes} to browse the tree in preorder. The answers come from the file; they are not restricted to Yes and No.
+\shot{main-menu.png}{0.80}{Figure 2. The main menu with the car tree loaded.}
+The diagram follows the selected node. At this terminal size, some branches extend beyond the visible area. Use Ctrl + arrow keys to scroll, or enlarge the terminal to see more of the tree. On a very small terminal, the map is hidden so the controls remain usable.
 
+\section*{Keyboard reference}
+\begin{tabular}{@{}p{1.45in}p{4.95in}@{}}
+\toprule
+\textbf{Key} & \textbf{Action}\\
+\midrule
+Up / down & Select an answer, menu item, or node.\\[5pt]
+Enter & Confirm a choice; in Explore, begin walking from that node.\\[5pt]
+Left / Backspace & Move to the parent while walking or exploring.\\[5pt]
+Right & Move to the first child in Explore.\\[5pt]
+\texttt{r} / Home & Return to the root while walking or exploring.\\[5pt]
+Ctrl + arrows & Scroll the diagram.\\[5pt]
+\texttt{c} & Center the diagram on the selected node.\\[5pt]
+Esc & Return to the menu; quit from the menu or before a tree loads.\\[5pt]
+\texttt{q} & Quit, except when typing in the filename field.\\
+\bottomrule
+\end{tabular}
+
+\newpage
+\section*{How the tree is stored}
+Each node stores its position, answer label, text, parent pointer, first-child pointer, and next-sibling pointer. Siblings form a linked list, which lets a question have more than two answers. For example, node 2 in the car tree has three children.
+
+The loader sorts the file records by preorder position. It keeps a list of ancestors while connecting each node to the parent one level above it. Invalid positions or levels are rejected. When the tree is destroyed, it deletes each child's subtree before deleting the parent.
+
+\section*{How the diagram is drawn}
+The interface gets a preorder copy of the nodes, with indexes for parents and children. In \texttt{ui/TreeDiagram.cpp}, the drawing steps are:
+\begin{enumerate}
+\item Find each node's depth and wrap its text to fit a box.
+\item Work backward through the list to reserve space for each subtree.
+\item Place parents beside their children, with one column per depth.
+\item Center the view on the selection and mark its path back to the root.
+\item Draw connections, borders, and text inside the visible area.
+\end{enumerate}
+The tree operations stay in \texttt{LinkedTree.cpp}; keyboard input and menus stay in \texttt{ui/TreeView.cpp}.
+
+\section*{Report and sample results}
+Each successful load replaces \texttt{about\_tree.txt} in the folder where the program was started. It contains an indented tree, the root, node counts, height, preorder node lists, and binary-tree checks. Height counts edges, so a leaf has height zero.
 \begin{center}
 \begin{tabular}{@{}lcc@{}}
-    \textbf{Property} & \textbf{Car} & \textbf{Investment} \\
-    \hline
-    Internal nodes & 4 & 3 \\
-    Leaf nodes & 6 & 4 \\
-    Height & 3 & 3 \\
-    Binary & No & Yes \\
-    Proper & Not applicable & Yes \\
-    Perfect & Not applicable & No \\
-    Balanced & Not applicable & No
+\toprule
+\textbf{Property} & \textbf{Car tree} & \textbf{Investment tree}\\
+\midrule
+Internal nodes & 4 & 3\\
+Leaf nodes & 6 & 4\\
+Height & 3 & 3\\
+Binary & No & Yes\\
+Proper & Not applicable & Yes\\
+Perfect & Not applicable & No\\
+Balanced & Not applicable & No\\
+\bottomrule
 \end{tabular}
 \end{center}
+A binary tree has at most two children per node. A proper binary tree has exactly two children per internal node. A perfect tree is proper with all leaves at the same depth. A balanced tree has child-subtree heights differing by at most one at every node. The program reports these last three checks only for binary trees.
 
-Run \texttt{./build/decision\_tree -{}-plain} for the original console. Enter a node's preorder position to see its content and one ancestor, descendant, and sibling. Missing relatives display \texttt{None}. Invalid input lets you try again, and \texttt{exit} quits. To build without FTXUI, configure CMake with \texttt{-DDECISION\_TREE\_UI=OFF}.
+\section*{Plain console option}
+Use \texttt{./build/decision\_tree -{}-plain} to look up nodes by their preorder positions. Each lookup shows the node's text and one ancestor, descendant, and sibling, using \texttt{None} when a relative is missing. Type \texttt{exit} to quit. Redirected input or output also selects this mode. To build without the interface, add \texttt{-DDECISION\_TREE\_UI=OFF} when configuring CMake. More build options are in \texttt{RUN.txt}.
 
-\section*{Implementation Explanation}
-Each linked node stores its position, edge label, content, parent, first child, and next sibling. Records are sorted by preorder position and connected using their levels. Linking siblings allows more than two children.
+\newpage
+\section*{Example: reaching a decision}
+In the car example, choosing Yes at nodes 1, 2, and 3 leads to node 4: \textbf{Purchase a car}. Orange marks the selected path, and green marks leaves outside that path. The node numbers match the preorder positions in the input file.
+\shot{car-walkthrough.png}{0.82}{Figure 3. The completed walkthrough in a larger terminal.}
+Choose \textbf{Start again} to return to the root or \textbf{Main menu} to select another action. The investment example uses the same controls, but every question has two answers. Its leaves occur at different depths, so it is proper but neither perfect nor balanced.
 
-Recursive functions print the tree and calculate its properties. Height counts edges to the deepest leaf. A proper binary tree has two children per internal node. A perfect tree also has all leaves at one level. For balance, subtree heights differ by at most one at every node.
-
-The display in \texttt{ui/} reads a copy of the nodes, sizes their boxes, and draws connections. The core uses only the standard library, and its destructor frees the nodes. \texttt{RUN.txt} has additional build options.
-
-\section*{Distribution of Work}
+\section*{Distribution of work}
 \begin{tabular}{@{}ll@{}}
-    Alexander Bugar & \textbf{25\%} \\
-    Hector Colon & \textbf{25\%} \\
-    Liam Dzanan & \textbf{25\%} \\
-    Seth Wisniewski & \textbf{25\%}
+Alexander Bugar & 25\%\\
+Hector Colon & 25\%\\
+Liam Dzanan & 25\%\\
+Seth Wisniewski & 25\%
 \end{tabular}
 
-\section*{Academic Integrity Statement}
+\section*{Academic integrity statement}
 We understand that there will be no tolerance towards academic dishonesty, and that cheating will lead to an academic referral. We are aware of the identified behaviors that are considered violations of the academic standards for Undergraduate and Graduate students per USF policy.
-
-\newgeometry{margin=0.6in}
-\begin{landscape}
-\section*{Car Purchase Tree}
-\begin{center}
-    \includegraphics[width=\linewidth,height=6in,keepaspectratio]{images/car-tree.png}
-\end{center}
-\small
-All ten nodes from \texttt{tree-car.txt} are shown. Orange follows Yes and Sometimes to node 6, which asks about repairs. Green boxes are leaf nodes. Node 2 has three answers, so this is not a binary tree. Numbers match the file's preorder positions.
-\normalsize
-\end{landscape}
-
-\begin{landscape}
-\section*{Investment Decision Tree}
-\begin{center}
-    \includegraphics[width=\linewidth,height=6in,keepaspectratio]{images/investment-tree.png}
-\end{center}
-\small
-All seven nodes from \texttt{tree-investment.txt} are shown. Orange follows No twice to node 5. Each question has two answers, making the tree binary and proper. The leaves have different levels, and the root's subtree heights differ by two, so it is neither perfect nor balanced.
-\normalsize
-\end{landscape}
-
 \end{document}
