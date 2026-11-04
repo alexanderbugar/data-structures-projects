@@ -41,17 +41,17 @@ cmake -S . -B build
 cmake --build build
 ./build/decision_tree
 \end{verbatim}
-Keep \texttt{Project 2/third\_party/ftxui} in the repository: the interface uses the library already stored there, so no download is needed. If the library is elsewhere, add \texttt{-DFTXUI\_DIR=/path/to/ftxui} to the first command.
+The interface uses FTXUI, stored in \texttt{third\_party/ftxui}.
 
 \section*{Open a tree}
-Enter \texttt{tree-car.txt}, \texttt{tree-investment.txt}, or a full file path and press Enter. If loading fails, the filename stays in the field so you can correct it.
+Enter \texttt{tree-car.txt}, \texttt{tree-investment.txt}, or a full file path and press Enter. If the file does not load, check the filename and try again.
 \shot{open-file.png}{0.60}{Figure 1. The filename field before loading the car example.}
 
 \newpage
 \section*{Using the interface}
-After a file loads, choose \textbf{Walk through questions} to answer one question at a time, or \textbf{Explore all nodes} to browse the tree in preorder. The answers come from the file; they are not restricted to Yes and No.
+After a file loads, choose \textbf{Walk through questions} to answer one question at a time, or \textbf{Explore all nodes} to browse the tree in preorder. Answer choices come from the file, including Sometimes in the car example.
 \shot{main-menu.png}{0.80}{Figure 2. The main menu with the car tree loaded.}
-The diagram follows the selected node. At this terminal size, some branches extend beyond the visible area. Use Ctrl + arrow keys to scroll, or enlarge the terminal to see more of the tree. On a very small terminal, the map is hidden so the controls remain usable.
+Some branches are offscreen in Figure 2. Use Ctrl + arrow keys to scroll or make the terminal larger. The map centers on the selected node and is hidden when the terminal is too small.
 
 \section*{Keyboard reference}
 \begin{tabular}{@{}p{1.45in}p{4.95in}@{}}
@@ -74,7 +74,7 @@ Esc & Return to the menu; quit from the menu or before a tree loads.\\[5pt]
 \section*{How the tree is stored}
 Each node stores its position, answer label, text, parent pointer, first-child pointer, and next-sibling pointer. Siblings form a linked list, which lets a question have more than two answers. For example, node 2 in the car tree has three children.
 
-The loader sorts the file records by preorder position. It keeps a list of ancestors while connecting each node to the parent one level above it. Invalid positions or levels are rejected. When the tree is destroyed, it deletes each child's subtree before deleting the parent.
+The program sorts the records by preorder position before linking the nodes. It keeps a list of ancestors while connecting each node to the parent one level above it. Invalid positions or levels are rejected. When the tree is destroyed, it deletes each child's subtree before deleting the parent.
 
 \section*{How the diagram is drawn}
 The interface gets a preorder copy of the nodes, with indexes for parents and children. In \texttt{ui/TreeDiagram.cpp}, the drawing steps are:
@@ -85,10 +85,10 @@ The interface gets a preorder copy of the nodes, with indexes for parents and ch
 \item Center the view on the selection and mark its path back to the root.
 \item Draw connections, borders, and text inside the visible area.
 \end{enumerate}
-The tree operations stay in \texttt{LinkedTree.cpp}; keyboard input and menus stay in \texttt{ui/TreeView.cpp}.
+\texttt{LinkedTree.cpp} handles tree operations. \texttt{ui/TreeView.cpp} handles the keyboard and menus.
 
 \section*{Report and sample results}
-Each successful load replaces \texttt{about\_tree.txt} in the folder where the program was started. It contains an indented tree, the root, node counts, height, preorder node lists, and binary-tree checks. Height counts edges, so a leaf has height zero.
+Loading a tree replaces \texttt{about\_tree.txt} in the folder where the program was started. It contains an indented tree, the root, node counts, height, preorder node lists, and binary-tree checks. Height counts edges, so a leaf has height zero.
 \begin{center}
 \begin{tabular}{@{}lcc@{}}
 \toprule
@@ -104,16 +104,22 @@ Balanced & Not applicable & No\\
 \bottomrule
 \end{tabular}
 \end{center}
-A binary tree has at most two children per node. A proper binary tree has exactly two children per internal node. A perfect tree is proper with all leaves at the same depth. A balanced tree has child-subtree heights differing by at most one at every node. The program reports these last three checks only for binary trees.
+A binary tree has at most two children per node. A proper binary tree has exactly two children per internal node. A perfect tree is proper with all leaves at the same depth. A binary tree is balanced when the left and right subtree heights differ by at most one at every node. The program reports these last three checks only for binary trees.
 
 \section*{Plain console option}
-Use \texttt{./build/decision\_tree -{}-plain} to look up nodes by their preorder positions. Each lookup shows the node's text and one ancestor, descendant, and sibling, using \texttt{None} when a relative is missing. Type \texttt{exit} to quit. Redirected input or output also selects this mode. To build without the interface, add \texttt{-DDECISION\_TREE\_UI=OFF} when configuring CMake. More build options are in \texttt{RUN.txt}.
+Run \texttt{./build/decision\_tree -{}-plain} and enter a node position to see its text, ancestor, descendant, and sibling. Missing relatives show \texttt{None}. Type \texttt{exit} to quit. To build the console directly from \texttt{Project 3}:
+{\small
+\begin{verbatim}
+g++ -std=c++17 main.cpp LinkedTree.cpp -o decision_tree
+./decision_tree
+\end{verbatim}
+}
 
 \newpage
 \section*{Example: reaching a decision}
 In the car example, choosing Yes at nodes 1, 2, and 3 leads to node 4: \textbf{Purchase a car}. Orange marks the selected path, and green marks leaves outside that path. The node numbers match the preorder positions in the input file.
-\shot{car-walkthrough.png}{0.82}{Figure 3. The completed walkthrough in a larger terminal.}
-Choose \textbf{Start again} to return to the root or \textbf{Main menu} to select another action. The investment example uses the same controls, but every question has two answers. Its leaves occur at different depths, so it is proper but neither perfect nor balanced.
+\shot{car-walkthrough.png}{0.82}{Figure 3. Choosing Yes three times leads to Purchase a car.}
+Choose \textbf{Start again} to return to the first question or \textbf{Main menu} to return to the menu. The investment example uses the same controls, but every question has two answers. It is proper because every internal node has two children. It is not perfect because its leaves have different depths, and it is not balanced because the root's subtree heights differ by two.
 
 \section*{Distribution of work}
 \begin{tabular}{@{}ll@{}}
