@@ -1,0 +1,10 @@
+0 1 Do you currently own a car?
+1 2 Yes Is the car in good working condition?
+1 10 No Purchase a car
+2 3 Yes Is the monthly payment for the new car, plus the monthly payment of your current car, within your monthly budget?
+2 6 Sometimes Does the car typically require expensive repairs?
+2 9 No Purchase a car
+3 4 Yes Purchase a car
+3 5 No Dont purchase a car
+3 7 Yes Purchase a car
+3 8 No Dont purchase a car
