@@ -14,6 +14,7 @@ enum class Page { File, Menu, Walk, Browse };
 
 class TreeView : public ComponentBase {
 public:
+    // set up the filename field, menu choices, and their keyboard actions.
     explicit TreeView(App& app) : app(app) {
         InputOption inputOptions;
         inputOptions.multiline = false;
@@ -37,6 +38,7 @@ public:
     // only the filename field or the current menu receives keyboard focus.
     Component ActiveChild() override { return page == Page::File ? input : menu; }
 
+    // handle navigation keys, then pass other input to the filename field or menu.
     bool OnEvent(Event event) override {
         if (event == Event::Escape) {
             if (page == Page::Menu || !tree) app.Exit();
@@ -213,6 +215,7 @@ private:
 };
 }
 
+// check whether input and output are connected to a terminal.
 bool hasTerminal() {
 #ifdef _WIN32
     return _isatty(_fileno(stdin)) && _isatty(_fileno(stdout));
@@ -221,6 +224,7 @@ bool hasTerminal() {
 #endif
 }
 
+// open the full-screen interface and keep it running until the user quits.
 int run() {
     auto app = App::Fullscreen();
     app.TrackMouse(false);

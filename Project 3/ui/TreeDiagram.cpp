@@ -44,6 +44,7 @@ struct NodeBox {
 
 class Diagram : public ftxui::Node {
 public:
+    // remember the nodes, selected node, and scroll offsets for this drawing.
     Diagram(const vector<LinkedTree::NodeInfo>& nodes, int selected, int panX, int panY)
         : nodes(nodes), selected(selected), panX(panX), panY(panY) {}
 
@@ -127,6 +128,7 @@ public:
             cell.character = glyph;
             cell.foreground_color = ink;
         };
+        // draw the visible part of a horizontal connection or border.
         auto horizontal = [&](int x1, int x2, int y, Color ink) {
             for (int x = max(x1, offsetX); x <= min(x2, offsetX + viewWidth - 1); ++x)
                 put(x, y, "─", ink);
@@ -214,6 +216,7 @@ private:
 };
 }
 
+// create the tree drawing used by the menu screen.
 Element diagram(const vector<LinkedTree::NodeInfo>& nodes, int selected, int panX, int panY) {
     return make_shared<Diagram>(nodes, selected, panX, panY);
 }

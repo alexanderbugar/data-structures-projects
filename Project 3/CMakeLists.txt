@@ -14,8 +14,14 @@ configure_file(tree-investment.txt tree-investment.txt COPYONLY)
 
 option(DECISION_TREE_UI "Build the keyboard tree interface" ON)
 if(DECISION_TREE_UI)
-    # Reuse the library already included with Project 2 instead of copying it.
-    set(FTXUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../Project 2/third_party/ftxui"
+    # update existing builds that still point to the old shared folder.
+    get_filename_component(OLD_FTXUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../Project 2/third_party/ftxui" ABSOLUTE)
+    if(FTXUI_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/../Project 2/third_party/ftxui"
+       OR FTXUI_DIR STREQUAL "${OLD_FTXUI_DIR}")
+        unset(FTXUI_DIR CACHE)
+    endif()
+    # use the library and license included with this project.
+    set(FTXUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/ftxui"
         CACHE PATH "Folder containing ftxui.hpp, ftxui.cpp, and LICENSE")
     if(NOT EXISTS "${FTXUI_DIR}/ftxui.cpp")
         message(FATAL_ERROR "Set FTXUI_DIR to the bundled FTXUI folder, or use -DDECISION_TREE_UI=OFF.")
